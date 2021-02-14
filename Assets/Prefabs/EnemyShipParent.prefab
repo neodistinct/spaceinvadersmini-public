@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 0.4
-  sineFrequence: 5
-  sineMagnitude: 0.2
+  sineFrequence: 4
+  sineMagnitude: 0.1
   sineMovementSpeed: 0.2
   bulletPrefab: {fileID: 1866732323468707804, guid: 2d7554a3b68a1d741ad6f1a3f693c036, type: 3}
 --- !u!61 &7463060119661251151

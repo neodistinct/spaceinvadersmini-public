@@ -6,11 +6,11 @@ public class EnemyShip : MonoBehaviour
     private float movementSpeed = 0.5f;
 
     [SerializeField]
-    private float sineFrequence = 0.01f;
+    private float sineFrequence = 5;
     [SerializeField]
-    private float sineMagnitude = 0.01f;
+    private float sineMagnitude = 0.2f;
     [SerializeField]
-    private float sineMovementSpeed = 0.01f;
+    private float sineMovementSpeed = 0.2f;
     
     private Vector3 _horizontalLocalPosition;
 
@@ -26,6 +26,8 @@ public class EnemyShip : MonoBehaviour
         _shipMesh = transform.Find("EnemyShip");
 
         if(_shipMesh) _horizontalLocalPosition = _shipMesh.localPosition;
+
+        sineFrequence += Random.Range(0.1f, 0.2f);
     }
 
     // Update is called once per frame
@@ -40,12 +42,12 @@ public class EnemyShip : MonoBehaviour
     private void SineMoveShip()
     {
         // Sine move enemy ship
-        if (_shipMesh.transform.localPosition.x >= 0.3f)
+        if (_shipMesh.transform.localPosition.x >= 0.1f)
         {
             _directionMultiplier = -1; // FACE LEFT         
 
         }
-        else if (_shipMesh.transform.localPosition.x <= -0.3f)
+        else if (_shipMesh.transform.localPosition.x <= -0.1f)
         {
             _directionMultiplier = 1; // FACE RIGhT
         }

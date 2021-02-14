@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     private int maxShootingEnemyCount = 5;
     [SerializeField]
 
+    private const int columnsCount = 6;
+    private const int columnWidth = 3;
+
     public static Player player;
 
     private void Awake()
@@ -54,7 +57,7 @@ public class GameManager : MonoBehaviour
                 // Now lets make them shoot
                 for(int i = 0; i < shootingCount; i++)
                 {
-                    if(enemies.Length > i) // Doing couroutine-safe check. To be remade.
+                    if(enemies.Length > i) // Doing coroutine-safe check. To be remade.
                         Instantiate(enemies[i].GetComponent<EnemyShip>().bulletPrefab, enemies[i].transform.position + new Vector3(0, -0.5f, 0), Quaternion.identity);
                 }
             }
@@ -65,7 +68,9 @@ public class GameManager : MonoBehaviour
     {
         while (true) {
 
-            float enemyXposition = Random.Range(-horizontalRange, horizontalRange);
+            int columnNnumber = Random.Range(0, columnsCount);
+
+            float enemyXposition = columnNnumber * columnWidth - horizontalRange ;
 
             Instantiate(enemyShipPrefab, new Vector2(enemyXposition, spawnVerticalPosition), Quaternion.identity);
 

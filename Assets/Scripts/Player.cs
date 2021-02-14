@@ -9,25 +9,37 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float movementSpeed = 2;
     [SerializeField]
+    private float shootingFrequency = 0.2f;
+    [SerializeField]
     private GameObject bulletPrefab;
     [SerializeField]
     private Text playerScoreText;
     [SerializeField]
     private Text playerLivesText;
     [SerializeField]
+    private Text livesImage;
+    [SerializeField]
     private GameManager gameManager;
+    [SerializeField]
+    private int maxPlayerLives = 5;
 
-    public int maxPlayerLives = 5;
+    [SerializeField]
+    private Transform healthImageParent;
+
+    [SerializeField]
+    private Image healthImage;
 
     private int _playerScore = 0;
     private int _playerLives = 5;
 
-    private const string livesMarker = "LIVES: ";
+    private float _defaultHealthWidth;
+    private Transform _defaultHelthImageTransform;
+
     private const string scoreMarker = "SCORE: ";
 
     public int lives {
         get { return _playerLives; }
-        set { _playerLives = value; playerLivesText.text = livesMarker + _playerLives; }
+        set { _playerLives = value; }
     }
 
     public int score
@@ -39,6 +51,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        _defaultHealthWidth = healthImage.rectTransform.rect.width;
+        _defaultHelthImageTransform = healthImage.transform;
+
         InitWithDefaultValues();
     }
 
@@ -69,7 +84,7 @@ public class Player : MonoBehaviour
         {
             Instantiate(bulletPrefab, transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(shootingFrequency);
         }
     }
 
@@ -78,10 +93,16 @@ public class Player : MonoBehaviour
         transform.position = new Vector2(0, -4.462f);
 
         _playerLives = maxPlayerLives;
+
+        for (var i = 1; i <= _playerLives; i++)
+        {
+            Instantiate(healthImage, healthImageParent.position + (Vector3.right * 20 * i), Quaternion.identity, healthImageParent);
+        }
+         
         _playerScore = 0;
 
         if (playerScoreText) playerScoreText.text = scoreMarker + _playerScore;
-        if (playerLivesText) playerLivesText.text = livesMarker + _playerLives;
+        //if (playerLivesText) playerLivesText.text = livesMarker + _playerLives;
     }
 
     public void ChangePoints(int points)
@@ -96,9 +117,9 @@ public class Player : MonoBehaviour
 
         if(_playerLives < 0) _playerLives = 0;
 
-        playerLivesText.text = livesMarker + _playerLives;
-
-        if(_playerLives == 0)
+        Destroy(healthImageParent.GetChild(healthImageParent.childCount - 1).gameObject);
+        
+        if (_playerLives == 0)
         {
             Time.timeScale = 0;
             gameManager.ShowRestartPanel(true);
