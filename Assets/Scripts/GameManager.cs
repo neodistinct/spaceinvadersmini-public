@@ -1,10 +1,11 @@
+
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
     [SerializeField]
     private GameObject enemyShipPrefab;
     [SerializeField]
@@ -17,8 +18,14 @@ public class GameManager : MonoBehaviour
     private float enemyShootingRate = 2;
     [SerializeField]
     private int maxShootingEnemyCount = 5;
+    
     [SerializeField]
-
+    private InputField playerNameText;
+    [SerializeField]
+    private Text scoreTableText;
+    [SerializeField]
+    GameObject playerInputPanel;
+    
     private const int columnsCount = 6;
     private const int columnWidth = 3;
 
@@ -103,7 +110,38 @@ public class GameManager : MonoBehaviour
         if (restartPanel != null)
         {
             restartPanel.SetActive(show);
+            if (playerInputPanel) playerInputPanel.SetActive(true);
+
+            // Displaying scores stored in Player Settings
+            scoreTableText.text = Settings.GetSavedScores();
+            playerNameText.text = string.Empty;
+
         }
     }
 
+    public void SavePlayerScore()
+    {
+        string playerName = playerNameText.text;
+
+        if (playerName != string.Empty)
+        {
+            string playerScoreString = playerName + " " + player.score;
+
+            Settings.SaveScore(playerScoreString);
+
+            if (playerInputPanel) playerInputPanel.SetActive(false);
+            
+            // Re-fetch stored scores
+            scoreTableText.text = Settings.GetSavedScores();
+
+        }
+    }
+
+    public void ClearScore()
+    {
+        Settings.ClearScores();
+
+        // Re-fetch stored scores
+        scoreTableText.text = Settings.GetSavedScores();
+    }
 }
